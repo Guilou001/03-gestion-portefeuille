@@ -39,9 +39,10 @@ canadiennes, les vues rapportent-elles plus qu'elles ne coûtent ?
 ## 2. D'où vient le projet, et ce qu'il apporte
 
 Black-Litterman est partout dans l'industrie et presque toujours implémenté de travers, parce que trois
-conventions cohabitent sans être imprimées dans les papiers : le rôle de tau, la construction d'Omega,
-et le fait que les poids non contraints ne somment pas à 1 (He-Litterman, note 5 : le portefeuille sans
-vue détient exactement w_eq/(1+tau)). Ce que ce dépôt apporte :
+conventions cohabitent sans être imprimées dans les papiers : le rôle de tau, le scalaire qui règle
+combien on doute des rendements d'équilibre, la construction d'Omega, la matrice qui dit combien on
+doute de chaque vue, et le fait que les poids non contraints ne somment pas à 1 (He-Litterman, note 5 :
+le portefeuille sans vue détient exactement w_eq/(1+tau)). Ce que ce dépôt apporte :
 
 - **La vérification contre les sources.** Les tables des deux papiers fondateurs ont été extraites en
   CSV (`refs/oracles/`, artefacts d'impression documentés) et servent de tests : chaque convention est
@@ -70,17 +71,18 @@ n'imprime des poids que pour un seul graphique (rien n'a été inventé pour les
 d'Idzorek portent des artefacts d'arrondi du papier lui-même, conservés tels quels avec leur
 explication.
 
-1. **`black_litterman.py`.** L'optimisation inverse (les rendements qui justifient les poids de
-   marché), la moyenne a posteriori entre équilibre et vues, la covariance d'estimation, les poids non
-   contraints, l'Omega proportionnel de He-Litterman et l'Omega calibré par confiance d'Idzorek.
+1. **`black_litterman.py`.** L'optimisation inverse, le calcul des rendements qui justifient les poids
+   de marché observés, la moyenne a posteriori entre équilibre et vues, la covariance d'estimation, les
+   poids non contraints, l'Omega proportionnel de He-Litterman et l'Omega calibré par confiance
+   d'Idzorek.
 2. **`hrp.py`.** La parité de risque hiérarchique en trois étapes du papier de 2016 : arbre de
    corrélations, réordonnancement, bissection récursive à l'inverse de la variance. Aucune inversion
    de matrice.
 3. **`brinson.py`.** L'attribution Brinson-Fachler (allocation, sélection, interaction) et le chaînage
    géométrique de Cariño : la somme des effets égale l'écart actif à 10⁻¹² près, testé.
 4. **`policy.py`.** La politique de placement mécanisée : dérive des poids, bandes de tolérance avec
-   hystérésis (on ne touche à rien tant qu'on est dans la bande), rééquilibrage au bord de bande,
-   coûts en points de base.
+   hystérésis, la règle qui laisse tout en place tant que chaque poids reste dans sa bande,
+   rééquilibrage au bord de bande, coûts en points de base.
 
 Les résultats de vérification, tous mesurés par `uv run pops oracles` :
 
@@ -92,7 +94,7 @@ Les résultats de vérification, tous mesurés par `uv run pops oracles` :
 | Rendements a posteriori, 8 classes (Table 6) | 0,01 pt | exacts aux 2 décimales imprimées |
 | Nouveaux poids (Table 6) | 0,02 pt | reproduits |
 | Poids à confiance totale (Table 7) | 0,02 pt | reproduits |
-| Confiances implicites (Table 7) | 0,2 pt | reproduites |
+| Confiances implicites (Table 7), la confiance que l'inclinaison des poids révèle après coup | 0,2 pt | reproduites |
 
 Comment lire ce tableau, en deux constats : d'abord, la chaîne Black-Litterman complète colle aux deux
 papiers dans leurs conventions respectives, y compris la différence entre eux (Idzorek optimise avec
