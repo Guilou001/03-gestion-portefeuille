@@ -8,7 +8,8 @@ tolérance autour, se met en œuvre ici en trois règles mécaniques :
    (chaque transaction coûte, et l'hystérésis évite d'osciller autour de la cible) ;
 3. quand une classe sort de sa bande, on ramène TOUTES les classes au bord de leur bande du côté de la
    cible (« trade to the edge »), pas à la cible elle-même : c'est la variante la moins coûteuse mesurée
-   par la littérature des bandes de non-échange.
+   par la littérature des bandes de non-échange ; le résidu de budget est ensuite réparti au prorata de
+   la marge restante des bandes, de sorte que le portefeuille rééquilibré respecte toutes les bandes.
 
 Les coûts sont facturés en points de base sur la valeur échangée.
 """
@@ -43,6 +44,26 @@ class RebalanceOutcome:
     events: list[pd.Timestamp] = field(default_factory=list)
 
 
+def _project_into_bands(w: pd.Series, policy: Policy) -> pd.Series:
+    """Ramène les poids dérivés au point le plus proche de l'ensemble « chaque poids dans sa bande,
+    somme à 1 » : d'abord chaque poids au bord de sa bande, puis le résidu de budget réparti au
+    prorata de la marge restante des autres bandes (une simple renormalisation ressortirait des
+    bandes, l'ensemble est non vide puisque les cibles somment à 1)."""
+    lo = pd.Series({c: max(0.0, t - policy.band) for c, t in policy.targets.items()})
+    hi = pd.Series({c: min(1.0, t + policy.band) for c, t in policy.targets.items()})
+    new_w = w.clip(lower=lo, upper=hi)
+    for _ in range(len(w) + 1):
+        residual = 1.0 - float(new_w.sum())
+        if abs(residual) < 1e-12:
+            break
+        room = (hi - new_w) if residual > 0 else (new_w - lo)
+        total_room = float(room.sum())
+        if total_room <= 0:
+            raise RuntimeError("bandes infaisables : aucune marge pour absorber le résidu de budget")
+        new_w = (new_w + residual * room / total_room).clip(lower=lo, upper=hi)
+    return new_w
+
+
 def run_policy(asset_returns: pd.DataFrame, policy: Policy) -> RebalanceOutcome:
     """Applique la politique sur des rendements périodiques (colonnes = classes de la politique)."""
     cols = list(policy.targets)
@@ -57,12 +78,7 @@ def run_policy(asset_returns: pd.DataFrame, policy: Policy) -> RebalanceOutcome:
         # tolérance numérique : un poids ramené AU bord (écart exactement égal à la bande) reste en place
         out_of_band = (w - pd.Series(policy.targets)).abs() > policy.band + 1e-9
         if out_of_band.any():
-            edge = {}
-            for c in cols:
-                target = policy.targets[c]
-                edge[c] = min(max(w[c], target - policy.band), target + policy.band)
-            new_w = pd.Series(edge)
-            new_w /= new_w.sum()                             # renormalisation au budget
+            new_w = _project_into_bands(w, policy)
             trade = new_w - w
             w = new_w
             n_rebal += 1

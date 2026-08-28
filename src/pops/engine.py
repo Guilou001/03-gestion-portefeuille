@@ -106,7 +106,7 @@ def _drift(w: pd.Series, ret: pd.Series) -> pd.Series:
 
 def run_backtest(returns: pd.DataFrame, policy: Policy, equities: list[str],
                  window: int = WINDOW, delta: float = DELTA, tau: float = TAU) -> BacktestResult:
-    """Le walk-forward complet ; l'achat initial paie aussi ses 10 points de base, déclaré."""
+    """Le walk-forward complet ; l'achat initial n'est facturé à aucun portefeuille, déclaré."""
     assets = list(policy.targets)
     r = returns[assets]
     oos = r.index[window:]
@@ -122,9 +122,10 @@ def run_backtest(returns: pd.DataFrame, policy: Policy, equities: list[str],
         w_bl = pd.Series(w_arr, index=assets)
         w_hrp = hrp_weights(history.cov())
 
+        # premier mois sans coût, comme la politique à bandes qui démarre aux cibles : les quatre
+        # portefeuilles partent investis, la comparaison ne facture que les rotations ultérieures
         for w_new, prev, out in ((w_bl, prev_bl, rets_bl), (w_hrp, prev_hrp, rets_hrp), (ew, prev_ew, rets_ew)):
-            base = w_new if prev is None else prev
-            trade = float((w_new - base).abs().sum()) if prev is not None else 1.0
+            trade = float((w_new - prev).abs().sum()) if prev is not None else 0.0
             cost = policy.fee * trade
             out.append(float((w_new * ret_t).sum()) - cost)
             if w_new is w_bl:
@@ -158,9 +159,9 @@ def summary(result: BacktestResult) -> pd.DataFrame:
     """Le tableau de synthèse : rendement annualisé calendaire, volatilité, rendement par unité de
     volatilité (pas un ratio de Sharpe : le taux sans risque n'est pas soustrait), pire creux, rotation."""
     rows = {}
+    years = len(result.returns) / 12.0    # 226 rendements mensuels composés = 226/12 années d'accumulation
     for name, series in result.returns.items():
         wealth = (1.0 + series).cumprod()
-        years = (series.index[-1] - series.index[0]).days / 365.25
         cagr = float(wealth.iloc[-1] ** (1.0 / years) - 1.0)
         vol = float(series.std() * np.sqrt(12.0))
         drawdown = float((wealth / wealth.cummax() - 1.0).min())
@@ -172,4 +173,6 @@ def summary(result: BacktestResult) -> pd.DataFrame:
         }
     table = pd.DataFrame(rows).T
     table.loc["black_litterman", "rotation_annuelle"] = float(result.turnover.iloc[1:].mean() * 12.0)
+    table.loc["politique_bandes", "rotation_annuelle"] = float(
+        run_policy(result.returns_assets, result.policy).turnover_total / years)
     return table

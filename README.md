@@ -13,7 +13,7 @@ sur six FNB de Toronto et fait tourner le tout pendant 18,75 ans, avec un rappor
 **Résultat en une phrase.** Le module Black-Litterman reproduit l'exemple complet d'Idzorek (2005)
 contre les tables imprimées du papier (**rendements a posteriori exacts aux deux décimales, poids à
 0,02 point près**) ; appliqué à six FNB canadiens sur 226 mois hors échantillon (2007-2026), le moteur
-à vues systématiques rapporte **6,28 % par an net de coûts, contre 6,66 %** pour la même politique
+à vues systématiques rapporte **6,25 % par an net de coûts, contre 6,63 %** pour la même politique
 rééquilibrée par bandes sans aucune vue : la discipline des bandes bat les vues, et l'attribution de
 Brinson montre où, classe par classe.
 
@@ -22,8 +22,8 @@ Brinson montre où, classe par classe.
 parity; Brinson-Fachler attribution with Cariño linking; investment-policy rebalancing bands with
 costs); second, an end-to-end Canadian engine on six Toronto ETFs, 226 out-of-sample months
 (2007-2026), with systematic momentum and long-term-reversal views sized by Idzorek confidences and
-capped by the policy bands. Measured verdict: the view-driven portfolio earns 6.28 % a year net of
-10 bp costs versus 6.66 % for the plain banded policy. A regenerable monthly report closes the loop.
+capped by the policy bands. Measured verdict: the view-driven portfolio earns 6.25 % a year net of
+10 bp costs versus 6.63 % for the plain banded policy. A regenerable monthly report closes the loop.
 
 ## 1. La question posée
 
@@ -140,7 +140,8 @@ n'utilise que les mois antérieurs à t. Chaque mois :
    chaque poids dans sa bande : les vues ne peuvent jamais faire sortir le portefeuille du document de
    politique, par construction ;
 5. chaque dollar échangé coûte 10 points de base (0,10 %), l'ordre de grandeur d'un écart
-   achat-vente sur ces FNB liquides ; l'achat initial paie aussi ses 10 pb.
+   achat-vente sur ces FNB liquides ; l'achat initial n'est facturé à aucun des quatre
+   portefeuilles, tous partent investis.
 
 Les deux vues sont mécaniques, aucune opinion humaine :
 
@@ -164,19 +165,19 @@ Tous les chiffres viennent de `results/tables/backtest_resume.csv` et `rendement
 régénérés par `uv run pops backtest` ; période 2007-11 à 2026-08, 226 mois, nets de 10 pb par
 transaction.
 
-| Portefeuille | Rendement annualisé | Volatilité | Rendement/volatilité | Pire creux | 100 $ deviennent |
-|---|---:|---:|---:|---:|---:|
-| Politique à bandes (sans vue) | **6,66 %** | 9,25 % | 0,72 | −27,8 % | 335 $ |
-| Black-Litterman sous bandes | 6,28 % | 9,03 % | 0,70 | −29,2 % | 313 $ |
-| Équipondéré | 5,94 % | 9,23 % | 0,64 | −31,5 % | 295 $ |
-| Parité de risque hiérarchique | 2,83 % | 2,49 % | 1,14 | −7,0 % | 169 $ |
+| Portefeuille | Rendement annualisé | Volatilité | Rendement/volatilité | Pire creux | Rotation | 100 $ deviennent |
+|---|---:|---:|---:|---:|---:|---:|
+| Politique à bandes (sans vue) | **6,63 %** | 9,27 % | 0,71 | −28,1 % | 2,8 %/an | 335 $ |
+| Black-Litterman sous bandes | 6,25 % | 9,02 % | 0,69 | −29,2 % | 84 %/an | 313 $ |
+| Équipondéré | 5,91 % | 9,22 % | 0,64 | −31,5 % | mensuelle | 295 $ |
+| Parité de risque hiérarchique | 2,82 % | 2,49 % | 1,13 | −7,0 % | mensuelle | 169 $ |
 
 Comment lire ce tableau, en trois constats. D'abord, la politique à bandes sans aucune vue gagne :
-les vues coûtent 36 points de base par an en net (calculé sur les deux séries de rendements), alors
+les vues coûtent 35 points de base par an en net (calculé sur les deux séries de rendements), alors
 même qu'elles ajoutent bien de l'allocation brute (+11 pb par an contre la politique ramenée aux
 cibles chaque mois, mesuré par l'attribution ci-dessous) ; la différence part en rotation, 84 % du
-portefeuille échangé par an, soit environ 8 pb de coûts, et dans le renoncement à laisser courir les
-gagnants dans leur bande. Ensuite, l'équipondéré, pourtant si difficile à battre dans la littérature
+portefeuille échangé par an contre 2,8 % pour la politique, soit environ 8 pb de coûts, et dans le
+renoncement à laisser courir les gagnants dans leur bande. Ensuite, l'équipondéré, pourtant si difficile à battre dans la littérature
 (DeMiguel, Garlappi et Uppal, 2009), perd ici contre la politique : ses 16,7 % dans l'immobilier coté
 et ses 33 % d'obligations ne sont pas une meilleure allocation que le 65/35. Enfin, la parité de
 risque hiérarchique ne joue pas dans la même catégorie de risque : ses poids à l'inverse de la
@@ -205,8 +206,9 @@ attendu d'une moyenne-variance sous contraintes de boîte, et la source de la ro
 Comment lire cette figure : le poids de XIU.TO dans la politique SANS vue dérive au gré des marchés
 (trait bleu) ; tant qu'il reste dans la zone grise, on ne touche à rien ; quand une classe sort de sa
 bande, tout le portefeuille est ramené au bord de bande (triangles), pas à la cible, parce que c'est
-moins coûteux. 73 rééquilibrages en 226 mois, environ un mois sur trois ; les triangles se
-concentrent après 2016, quand la hausse des actions pousse XIU contre son plafond de 30 %.
+moins coûteux, puis le résidu de budget est réparti dans la marge des autres bandes. 60 rééquilibrages
+en 226 mois, environ un mois sur quatre ; les triangles se concentrent après 2016, quand la hausse des
+actions pousse XIU contre son plafond de 30 %.
 
 ![Attribution de Brinson du moteur contre la politique](results/figures/attribution_brinson.png)
 
@@ -229,7 +231,7 @@ relancer la commande un mois plus tard produit le suivant, sans intervention.
 
 ```bash
 uv sync --locked --all-extras     # environnement verrouillé (Python 3.12, pandas 3)
-uv run pytest                     # 27 tests : 8 oracles papier + 11 propriétés + 8 moteur (3 s, sans réseau)
+uv run pytest                     # 28 tests : 8 oracles papier + 11 propriétés + 9 moteur (3 s, sans réseau)
 uv run pops fetch                 # prix Yahoo des six FNB (quelques secondes, non commités)
 uv run pops backtest              # 226 mois, tables + 4 figures (2,6 s mesurées)
 uv run pops report                # le rapport du dernier mois

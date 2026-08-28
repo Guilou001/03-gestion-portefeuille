@@ -80,6 +80,21 @@ def test_attribution_is_pure_allocation(backtest):
     assert attr.loc["TOTAL", "total"] == pytest.approx(active, abs=1e-10)
 
 
+def test_policy_rebalance_lands_inside_every_band():
+    from pops.policy import run_policy
+
+    r = synthetic_returns(40, seed=3)
+    r.iloc[10] = [0.30, -0.10, -0.10, -0.10, 0.00, 0.00]     # choc qui force des sorties de bande
+    policy = Policy(targets=TARGETS)
+    out = run_policy(r, policy)
+    assert out.n_rebalances >= 1
+    for date in out.events:
+        w = out.weights.loc[date]
+        for asset, target in TARGETS.items():
+            assert abs(w[asset] - target) <= policy.band + 1e-9   # la projection respecte chaque bande
+        assert w.sum() == pytest.approx(1.0, abs=1e-9)
+
+
 def test_monthly_report_is_written(tmp_path):
     path = monthly_report(synthetic_returns(70), Policy(targets=TARGETS), EQUITIES, out_dir=tmp_path)
     text = path.read_text(encoding="utf-8")
