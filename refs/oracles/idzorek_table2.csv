@@ -1,0 +1,11 @@
+asset_class,weight_historical_pct,weight_capm_gsmi_pct,weight_implied_equilibrium_pct,market_capitalization_weight_pct
+US Bonds,1144.32,21.33,19.34,19.34
+Int'l Bonds,-104.59,5.19,26.13,26.13
+US Large Growth,54.99,10.80,12.09,12.09
+US Large Value,-5.29,10.82,12.09,12.09
+US Small Growth,-60.52,3.73,1.34,1.34
+US Small Value,81.47,-0.49,1.34,1.34
+Int'l Dev. Equity,-104.36,17.10,24.18,24.18
+Int'l Emerg. Equity,14.59,2.14,3.49,3.49
+High,1144.32,21.33,26.13,26.13
+Low,-104.59,-0.49,1.34,1.34

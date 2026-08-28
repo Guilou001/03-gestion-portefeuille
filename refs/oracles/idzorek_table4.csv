@@ -1,0 +1,4 @@
+view,formula,variance_pct
+1,p1*Sigma*p1',2.836
+2,p2*Sigma*p2',0.563
+3,p3*Sigma*p3',3.462

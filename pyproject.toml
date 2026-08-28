@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pops"
+version = "0.1.0"
+description = "Moteur d'allocation sous politique de placement pour un investisseur canadien : Black-Litterman validé sur He-Litterman (1999) et Idzorek (2005), HRP, attribution de Brinson, bandes de rééquilibrage avec coûts."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Guillaume Vaudescal" }]
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "numpy>=1.26",
+  "pandas>=2.2",
+  "scipy>=1.13",
+  "matplotlib>=3.9",
+  "pyarrow>=15",
+  "typer>=0.12",
+  "yfinance>=0.2.40",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[project.scripts]
+pops = "pops.cli:app"
+
+[project.urls]
+Repository = "https://github.com/Guilou001/portfolio-ops-ca"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pops"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501", "B008"]

@@ -1,0 +1,13 @@
+asset_class,historical_mu_hist_pct,capm_gsmi_mu_gsmi_pct,capm_portfolio_mu_p_pct,implied_equilibrium_pi_pct
+US Bonds,3.15,0.02,0.08,0.08
+Int'l Bonds,1.75,0.18,0.67,0.67
+US Large Growth,-6.39,5.57,6.41,6.41
+US Large Value,-2.86,3.39,4.08,4.08
+US Small Growth,-6.75,6.59,7.43,7.43
+US Small Value,-0.54,3.16,3.70,3.70
+Int'l Dev. Equity,-6.75,3.92,4.80,4.80
+Int'l Emerg. Equity,-5.26,5.60,6.60,6.60
+Weighted Average,-1.97,2.41,3.00,3.00
+Standard Deviation,3.73,2.28,2.53,2.53
+High,3.15,6.59,7.43,7.43
+Low,-6.75,0.02,0.08,0.08

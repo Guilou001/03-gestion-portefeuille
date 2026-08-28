@@ -1,0 +1,4 @@
+asset_class,market_capitalization_billions_usd,relative_weight_pct,implied_equilibrium_return_pi_pct,weighted_excess_return_pct
+US Large Growth,5174,90.00,6.41,5.77
+US Small Growth,575,10.00,7.43,0.74
+Total,5749,100.00,,6.52

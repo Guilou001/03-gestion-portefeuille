@@ -1,0 +1,11 @@
+statistic,market_capitalization_weighted_portfolio,black_litterman_portfolio,unit
+Excess Return,3.000,3.101,percent
+Variance,0.00979,0.01012,decimal
+Standard Deviation,9.893,10.058,percent
+Beta,1,1.01256,decimal
+Residual Return,,0.063,percent
+Residual Risk,,0.904,percent
+Active Return,,0.101,percent
+Active Risk,,0.913,percent
+Sharpe Ratio,0.3033,0.3083,decimal
+Information Ratio,,0.0699,decimal

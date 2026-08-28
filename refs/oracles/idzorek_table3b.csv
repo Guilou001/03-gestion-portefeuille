@@ -1,0 +1,4 @@
+asset_class,market_capitalization_billions_usd,relative_weight_pct,implied_equilibrium_return_pi_pct,weighted_excess_return_pct
+US Large Value,5174,90.00,4.08,3.67
+US Small Value,575,10.00,3.70,0.37
+Total,5749,100.00,,4.04

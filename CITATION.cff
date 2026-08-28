@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "Pour citer ce moteur, utilisez les métadonnées ci-dessous ; citez aussi les papiers vérifiés."
+title: "portfolio-ops-ca : moteur d'allocation sous politique de placement, modules vérifiés contre He-Litterman (1999) et Idzorek (2005)"
+authors:
+  - family-names: Vaudescal
+    given-names: Guillaume
+repository-code: "https://github.com/Guilou001/portfolio-ops-ca"
+license: MIT

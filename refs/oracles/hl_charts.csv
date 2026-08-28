@@ -1,0 +1,4 @@
+exhibit,country,series,printed_value_pct,quantity,view_description,page_printed
+Chart 1A,Australia,Equal Expected Returns,71.4,poids optimal,"Moyenne-variance traditionnelle ; rendements esperes egaux a 7% pour tous les pays (avant decalage)",3
+Chart 1A,Germany,Equal Expected Returns,-33.5,poids optimal,"Moyenne-variance traditionnelle ; rendements esperes egaux a 7% pour tous les pays (avant decalage)",3
+Chart 1A,France,Expected Returns Shifted for European Countries,-94.8,poids optimal,"Moyenne-variance traditionnelle ; Allemagne +2.5%, France et UK -2.5% (vue : l'Allemagne surperforme l'Europe de 5%/an)",3
