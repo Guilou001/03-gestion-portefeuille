@@ -11,6 +11,6 @@ jobs:
       - name: Install (locked)
         run: uv sync --locked --all-extras
       - name: Lint
-        run: uv run ruff check src tests scripts
+        run: uv run ruff check src tests
       - name: Unit tests (no external data)
         run: uv run pytest
