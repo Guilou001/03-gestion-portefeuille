@@ -6,7 +6,7 @@ construit et vérifie les quatre briques : Black-Litterman (validé chiffre à c
 Brinson-Fachler avec chaînage de Cariño, et bandes de rééquilibrage avec coûts. La seconde les branche
 sur six FNB de Toronto et fait tourner le tout pendant 18,75 ans, avec un rapport mensuel régénérable.
 
-[![ci](https://github.com/Guilou001/03-portfolio-ops-ca/actions/workflows/ci.yml/badge.svg)](https://github.com/Guilou001/03-portfolio-ops-ca/actions/workflows/ci.yml)
+[![ci](https://github.com/Guilou001/03-gestion-portefeuille/actions/workflows/ci.yml/badge.svg)](https://github.com/Guilou001/03-gestion-portefeuille/actions/workflows/ci.yml)
 ![python](https://img.shields.io/badge/python-3.12-blue)
 ![licence](https://img.shields.io/badge/code-MIT-green)
 

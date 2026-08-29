@@ -27,7 +27,7 @@ dev = ["pytest>=8", "ruff>=0.6"]
 pops = "pops.cli:app"
 
 [project.urls]
-Repository = "https://github.com/Guilou001/03-portfolio-ops-ca"
+Repository = "https://github.com/Guilou001/03-gestion-portefeuille"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pops"]
