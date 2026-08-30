@@ -10,6 +10,8 @@ sur six FNB de Toronto et fait tourner le tout pendant 18,75 ans, avec un rappor
 ![python](https://img.shields.io/badge/python-3.12-blue)
 ![licence](https://img.shields.io/badge/code-MIT-green)
 
+Le même contenu en PDF : [rapport/rapport.pdf](rapport/rapport.pdf).
+
 **Résultat en une phrase.** Le module Black-Litterman reproduit l'exemple complet d'Idzorek (2005)
 contre les tables imprimées du papier (**rendements a posteriori exacts aux deux décimales, poids à
 0,02 point près**) ; appliqué à six FNB canadiens sur 226 mois hors échantillon (2007-2026), le moteur
