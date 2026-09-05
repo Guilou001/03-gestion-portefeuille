@@ -1,10 +1,12 @@
-# Un moteur d'allocation sous politique de placement, vérifié contre les papiers puis appliqué au Canada
+# Gérer un portefeuille canadien sous une politique de placement
 
-Ce dépôt fait le travail d'un gestionnaire de portefeuille institutionnel en deux moitiés. La première
-construit et vérifie les quatre briques : Black-Litterman (validé chiffre à chiffre contre He-Litterman
-1999 et Idzorek 2005), parité de risque hiérarchique (López de Prado 2016), attribution de
-Brinson-Fachler avec chaînage de Cariño, et bandes de rééquilibrage avec coûts. La seconde les branche
-sur six FNB de Toronto et fait tourner le tout pendant 18,75 ans, avec un rapport mensuel régénérable.
+Un gestionnaire institutionnel ne choisit pas seulement des titres. Il doit traduire des opinions en poids, respecter des limites, décider quand rééquilibrer et expliquer après coup d'où vient l'écart de rendement. Le présent projet réunit ces opérations dans un même moteur appliqué à six fonds négociés en bourse canadiens.
+
+Chaque composante est d'abord vérifiée contre une référence publiée. Le modèle de Black-Litterman transforme des opinions en rendements attendus, la parité de risque hiérarchique répartit le risque, l'attribution de Brinson explique la performance et les bandes de rééquilibrage limitent les transactions. Ces outils sont ensuite reliés dans l'ordre où un gestionnaire les utiliserait.
+
+**Résultat principal.** L'exemple complet d'Idzorek est reproduit avec des rendements attendus identiques aux deux décimales et des poids à 0,02 point près. Sur 226 mois de 2007 à 2026, le portefeuille guidé par des opinions systématiques rapporte 6,25 % par an après les coûts. La même politique, rééquilibrée par bandes sans opinion, rapporte 6,63 %. En ce sens, les opinions ajoutées au modèle n'améliorent pas le résultat observé.
+
+Afin d'expliquer cette comparaison, nous présenterons d'abord les quatre composantes et les références utilisées pour les vérifier. Dans un deuxième temps, nous décrirons les fonds, les règles de la politique de placement et la construction des opinions. Ensuite, nous suivrons le portefeuille mois par mois et nous attribuerons son écart de rendement. Enfin, nous présenterons le rapport mensuel, les limites et les commandes de reproduction.
 
 [![ci](https://github.com/Guilou001/03-gestion-portefeuille/actions/workflows/ci.yml/badge.svg)](https://github.com/Guilou001/03-gestion-portefeuille/actions/workflows/ci.yml)
 ![python](https://img.shields.io/badge/python-3.12-blue)
@@ -12,12 +14,8 @@ sur six FNB de Toronto et fait tourner le tout pendant 18,75 ans, avec un rappor
 
 Le même contenu en PDF : [rapport/rapport.pdf](rapport/rapport.pdf).
 
-**Résultat en une phrase.** Le module Black-Litterman reproduit l'exemple complet d'Idzorek (2005)
-contre les tables imprimées du papier (**rendements a posteriori exacts aux deux décimales, poids à
-0,02 point près**) ; appliqué à six FNB canadiens sur 226 mois hors échantillon (2007-2026), le moteur
-à vues systématiques rapporte **6,25 % par an net de coûts, contre 6,63 %** pour la même politique
-rééquilibrée par bandes sans aucune vue : la discipline des bandes bat les vues, et l'attribution de
-Brinson montre où, classe par classe.
+<details>
+<summary>Résumé en anglais</summary>
 
 *English summary.* Institutional portfolio operations in two halves: first, tested building blocks
 (Black-Litterman verified cell-by-cell against He-Litterman 1999 and Idzorek 2005; hierarchical risk
@@ -27,7 +25,8 @@ costs); second, an end-to-end Canadian engine on six Toronto ETFs, 226 out-of-sa
 capped by the policy bands. Measured verdict: the view-driven portfolio earns 6.25 % a year net of
 10 bp costs versus 6.63 % for the plain banded policy. A regenerable monthly report closes the loop.
 
-## 1. La question posée
+</details>
+## 1. La question en détail
 
 Comment un gestionnaire passe-t-il d'une politique de placement, le document qui fixe les cibles par
 classe d'actifs et les bandes de tolérance autour, à des décisions mensuelles justifiables ? Il lui
@@ -130,7 +129,7 @@ décision du moteur tombe en novembre 2007, mesuré.
 
 ### La méthode, pas à pas
 
-Le backtest est un walk-forward, la règle qui interdit de voir le futur : la décision du mois t
+Le test avance une période à la fois, selon une règle qui interdit de voir le futur : la décision du mois t
 n'utilise que les mois antérieurs à t. Chaque mois :
 
 1. la covariance des rendements s'estime sur les 60 mois précédents, annualisée ;
@@ -247,7 +246,7 @@ les prix bruts jamais.
 
 | Limite | Statut |
 |---|---|
-| Le backtest commence en novembre 2007 (naissance du plus jeune FNB en 2002 plus 60 mois de chauffe), pas en 1996 comme prévu initialement | mesuré ; aucun FNB canadien ne couvre 1996, et le dépôt n'utilise que des données libres |
+| Le test commence en novembre 2007 (naissance du plus jeune FNB en 2002 plus 60 mois de chauffe), pas en 1996 comme prévu initialement | mesuré ; aucun FNB canadien ne couvre 1996, et le dépôt n'utilise que des données libres |
 | Les Q (2 %, 1 %) et confiances (50 %, 25 %) des vues sont des choix déclarés, non optimisés ; les optimiser sur la période testée serait du surajustement | reconnu et assumé |
 | Le rendement/volatilité du tableau n'est pas un ratio de Sharpe : le taux sans risque n'est pas soustrait | déclaré dans le code et ici |
 | Coûts fixés à 10 pb par dollar échangé, sans impact de marché ni taxes ; les frais de gestion des FNB sont dans les prix | hypothèse déclarée |
